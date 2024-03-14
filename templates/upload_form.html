@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Video</title>
+</head>
+<body>
+    <h1>Upload Video</h1>
+    <form id="uploadForm" action="/api/upload" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput">
+        <button type="submit">Upload</button>
+    </form>
+    <form id="predict" action="/api/predict" enctype="multipart/form-data">
+        <button type="submit">Predict</button>
+    </form>
+
+
+    <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var formData = new FormData();
+        formData.append('file', document.getElementById('fileInput').files[0]);
+
+        fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server responded with status code: ' + response.status);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('result').innerHTML = `<p>Error: ${error}</p>`;
+        });
+    });
+
+    </script>
+
+</body>
+</html>
